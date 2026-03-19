@@ -1,44 +1,56 @@
-# Autonomous Port Scan Detection Pipeline
+# Port Scan Detection Pipeline
 
 ## Overview
-This project simulates a real-world cybersecurity detection pipeline using a segmented virtual network. It ingests network telemetry from Zeek (Security Onion), analyzes connection behavior, and identifies port scanning activity using Python-based detection logic.
+This project is a homelab-based cybersecurity detection pipeline that identifies port scanning activity using Zeek logs collected by Security Onion and Python-based analysis.
 
-## Objective
-To build a hands-on system that:
-- Processes real network logs
-- Detects suspicious behavior (port scans)
-- Correlates attacker and target activity
-- Outputs structured alerts for further automation
+## Goal
+The goal of this project was to build a system that could:
+- ingest real network telemetry
+- detect suspicious port scanning behavior
+- identify the attacker and target
+- generate structured alert output
 
----
-
-## Architecture
-
-### Network Segmentation
-- LAN: 192.168.10.0/24
-- DMZ: 192.168.20.0/24
-- ATTACK: 192.168.30.0/24
-
-### Components
-- pfSense: Firewall and routing
-- Security Onion: Log collection (Zeek)
-- Kali Linux: Attack simulation
-- Metasploitable / Web Server: Targets
-- Admin Box: Log processing and detection
-
----
+## Lab Environment
+- pfSense (network segmentation)
+- Security Onion (Zeek logs)
+- Kali Linux (attacker)
+- DMZ targets (Metasploitable / Web server)
+- Admin Box (log analysis)
 
 ## Workflow
-
-1. Generate traffic (Nmap scans from Kali)
-2. Capture logs via Zeek (Security Onion)
+1. Generate traffic from attacker machine
+2. Capture logs with Zeek
 3. Transfer logs via SCP
 4. Parse logs using Python
 5. Detect port scanning behavior
-6. Output alerts to terminal and JSON file
-
----
+6. Output alerts (terminal + JSON)
 
 ## Detection Logic
-
 The system tracks:
+
+source IP → destination IP → unique destination ports
+
+If a source connects to many ports on a target, it is flagged as a port scan.
+
+## Example Output
+- Attacker: 192.168.30.100
+- Target: 192.168.20.20
+- Ports scanned: 65535
+
+## Files
+- `pipeline.py`
+- `port_scan_detector.py`
+- `alerts.json`
+
+## Skills Demonstrated
+- Python scripting
+- log parsing
+- behavior-based detection
+- network analysis
+- security automation
+
+## Future Improvements
+- AWS deployment
+- real-time detection
+- Docker containerization
+- AI-based alert explanation
